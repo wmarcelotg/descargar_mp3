@@ -7,7 +7,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {
-      background: linear-gradient(to right, #1f1c2c, #928dab);
+      background: linear-gradient(135deg, #2c3e50, #4ca1af);
       color: white;
       font-family: 'Segoe UI', sans-serif;
     }
@@ -15,10 +15,11 @@
       margin-top: 80px;
     }
     .card {
-      background-color: rgba(255, 255, 255, 0.07);
+      background-color: rgba(255, 255, 255, 0.08);
       border: none;
       border-radius: 20px;
-      padding: 30px;
+      padding: 35px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
     }
     .progress {
       height: 25px;
@@ -39,6 +40,9 @@
     }
     .btn-success:hover {
       background-color: #00b347;
+    }
+    input, select {
+      font-size: 16px;
     }
   </style>
 </head>
@@ -61,30 +65,33 @@
 
       <!-- Sección de carga -->
       <div id="loadingSection" class="mt-4">
-        <p><strong>⏳ Convirtiendo canción...</strong></p>
+        <p><strong>⏳ Convirtiendo...</strong></p>
         <div class="progress mb-3">
           <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" style="width: 100%"></div>
         </div>
       </div>
 
+      <!-- Mensaje de error -->
       {% if error_message %}
         <div class="alert alert-danger mt-4">
-          {{ error_message }}
+          ⚠️ {{ error_message }}
         </div>
       {% endif %}
 
+      <!-- Información del video -->
       {% if video_title %}
         <div class="mt-4">
-          <p><strong>🎶 Canción:</strong> {{ video_title }}</p>
+          <p><strong>🎶 Video:</strong> {{ video_title }}</p>
           <div class="progress mb-3">
             <div class="progress-bar progress-bar-striped bg-success" style="width: 100%"></div>
           </div>
         </div>
       {% endif %}
 
+      <!-- Botón de descarga -->
       {% if download_link %}
         <div class="mt-3">
-          <a href="{{ download_link }}" class="btn btn-success">Descargar archivo</a>
+          <a href="{{ download_link }}" class="btn btn-success">⬇️ Descargar archivo</a>
         </div>
       {% endif %}
     </div>
