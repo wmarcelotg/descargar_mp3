@@ -14,8 +14,8 @@ def index():
     error_message = None
 
     if request.method == "POST":
-        video_url = request.form["url"]
-        format_type = request.form["format"]
+        video_url = request.form.get("url")
+        format_type = request.form.get("format")
 
         ydl_opts_info = {
             'quiet': True,
@@ -27,7 +27,6 @@ def index():
                 info_dict = ydl.extract_info(video_url, download=False)
                 video_title = info_dict.get('title', 'Desconocido')
 
-            # Configuración para descargar
             ydl_opts_download = {
                 'outtmpl': f'{DOWNLOAD_FOLDER}/%(title)s.%(ext)s',
                 'noplaylist': True,
@@ -54,8 +53,8 @@ def index():
                 result = ydl.extract_info(video_url, download=True)
                 if 'entries' in result:
                     result = result['entries'][0]
-
                 filename = ydl.prepare_filename(result)
+
                 if format_type == "mp3":
                     filename = filename.replace(".webm", ".mp3").replace(".m4a", ".mp3")
 
@@ -64,14 +63,17 @@ def index():
 
         except yt_dlp.utils.DownloadError as e:
             error_text = str(e)
-            if "Sign in to confirm you’re not a bot" in error_text or "This video is private" in error_text:
-                error_message = "⚠️ Este video requiere iniciar sesión en YouTube. Por favor, intenta con otro enlace."
+            if "Sign in to confirm" in error_text or "This video is private" in error_text:
+                error_message = "⚠️ Este video requiere inicio de sesión. Intenta con otro enlace."
             else:
-                error_message = f"❌ Error al procesar el video: {error_text}"
+                error_message = f"❌ Error al descargar: {error_text}"
         except Exception as e:
             error_message = f"❌ Error inesperado: {str(e)}"
 
-    return render_template("index.html", download_link=download_link, video_title=video_title, error_message=error_message)
+    return render_template("index.html",
+                           video_title=video_title,
+                           download_link=download_link,
+                           error_message=error_message)
 
 @app.route("/download/<filename>")
 def download_file(filename):

@@ -15,7 +15,7 @@
       margin-top: 80px;
     }
     .card {
-      background-color: rgba(255, 255, 255, 0.05);
+      background-color: rgba(255, 255, 255, 0.07);
       border: none;
       border-radius: 20px;
       padding: 30px;
@@ -25,6 +25,20 @@
     }
     #loadingSection {
       display: none;
+    }
+    .btn-primary {
+      background-color: #6a11cb;
+      border: none;
+    }
+    .btn-primary:hover {
+      background-color: #2575fc;
+    }
+    .btn-success {
+      background-color: #00c853;
+      border: none;
+    }
+    .btn-success:hover {
+      background-color: #00b347;
     }
   </style>
 </head>
@@ -37,7 +51,7 @@
           <input type="text" class="form-control" name="url" id="url" placeholder="Pega la URL del video" required>
         </div>
         <div class="mb-3">
-          <select class="form-select" name="format">
+          <select class="form-select" name="format" required>
             <option value="mp3">🎵 MP3</option>
             <option value="mp4">🎥 MP4</option>
           </select>
@@ -52,6 +66,12 @@
           <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" style="width: 100%"></div>
         </div>
       </div>
+
+      {% if error_message %}
+        <div class="alert alert-danger mt-4">
+          {{ error_message }}
+        </div>
+      {% endif %}
 
       {% if video_title %}
         <div class="mt-4">
