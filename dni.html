@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Consulta DNI - API Perú</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; }
+        .resultado { margin-top: 20px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; background-color: #f8f8f8; }
+    </style>
+</head>
+<body>
+
+    <h2>Buscar datos por DNI</h2>
+    <form id="form-dni">
+        <input type="text" id="dni" placeholder="Ingrese DNI" maxlength="8" required>
+        <button type="submit">Buscar</button>
+    </form>
+
+    <div class="resultado" id="resultado"></div>
+
+    <script>
+        document.getElementById('form-dni').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const dni = document.getElementById('dni').value.trim();
+            const resultadoDiv = document.getElementById('resultado');
+
+            if (dni.length !== 8 || isNaN(dni)) {
+                resultadoDiv.innerHTML = '❌ El DNI debe tener 8 dígitos numéricos.';
+                return;
+            }
+
+            resultadoDiv.innerHTML = '🔍 Buscando...';
+
+            // Reemplaza este token con el tuyo de https://apiperu.dev
+            const token = 'e2a40dd386e4cceae9dd6c254f1aef50c8e72821f6d980dcd3387fcbf68836da';
+            const url = `https://api.apiperu.dev/api/dni/${dni}?api_token=${token}`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const info = data.data;
+                        resultadoDiv.innerHTML = `
+                            ✅ <strong>DNI:</strong> ${dni}<br>
+                            <strong>Nombres:</strong> ${info.nombres}<br>
+                            <strong>Apellido Paterno:</strong> ${info.apellido_paterno}<br>
+                            <strong>Apellido Materno:</strong> ${info.apellido_materno}
+                        `;
+                    } else {
+                        resultadoDiv.innerHTML = '❌ No se encontraron datos para el DNI ingresado.';
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                    resultadoDiv.innerHTML = '⚠️ Error al conectar con la API.';
+                });
+        });
+    </script>
+
+</body>
+</html>
