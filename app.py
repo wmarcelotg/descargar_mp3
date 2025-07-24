@@ -19,7 +19,8 @@ def index():
 
         ydl_opts_info = {
             'quiet': True,
-            'noplaylist': True
+            'noplaylist': True,
+            'cookies': 'cookies.txt'  # <- Añadir cookies
         }
 
         try:
@@ -30,7 +31,8 @@ def index():
             ydl_opts_download = {
                 'outtmpl': f'{DOWNLOAD_FOLDER}/%(title)s.%(ext)s',
                 'noplaylist': True,
-                'quiet': True
+                'quiet': True,
+                'cookies': 'cookies.txt'  # <- Añadir cookies también aquí
             }
 
             if format_type == "mp3":
@@ -64,7 +66,7 @@ def index():
         except yt_dlp.utils.DownloadError as e:
             error_text = str(e)
             if "Sign in to confirm" in error_text or "This video is private" in error_text:
-                error_message = "⚠️ Este video requiere inicio de sesión. Intenta con otro enlace."
+                error_message = "⚠️ Este video requiere inicio de sesión. Intenta con otro enlace o exporta cookies."
             else:
                 error_message = f"❌ Error al descargar: {error_text}"
         except Exception as e:
@@ -80,6 +82,5 @@ def download_file(filename):
     return send_from_directory(DOWNLOAD_FOLDER, filename, as_attachment=True)
 
 if __name__ == "__main__":
-    import os
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port, debug=True)
